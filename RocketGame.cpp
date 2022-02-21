@@ -12,28 +12,32 @@ GLFWwindow* window;
 
 // Include GLM
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
 #include "common/shader.hpp"
 
+#define WINDOW_WIDTH  ( 1024 )
+#define WINDOW_HEIGHT ( 768 )
+
 int main(void)
 {
     // Initialise GLFW
-    if (!glfwInit())
+    if( !glfwInit() )
     {
         fprintf(stderr, "Failed to initialize GLFW\n");
         getchar();
         return -1;
     }
 
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint( GLFW_SAMPLES, 4 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+    glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // To make MacOS happy; should not be needed
+    glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow(1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+    window = glfwCreateWindow( WINDOW_WIDTH, WINDOW_HEIGHT, "Rocket Game", NULL, NULL );
     if (window == NULL) {
         fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
         getchar();
@@ -52,11 +56,11 @@ int main(void)
     }
 
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetInputMode( window, GLFW_STICKY_KEYS, GL_TRUE );
 
-    // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
+    // Black background
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
@@ -67,26 +71,34 @@ int main(void)
         "shaders/SimpleFragmentShader.fragmentshader");
 
     static const GLfloat g_vertex_buffer_data[] = {
+        50.0f,   50.0f,   0.0f,
+        50.0f,   100.0f,  0.0f,
+        100.0f,  100.0f,  0.0f,
+    };
+
+    /*static const GLfloat g_vertex_buffer_data[] = {
         -0.5f,  0.0f,  0.0f,
          0.0f, -0.75f, 0.0f,
-         0.5f,  0.0f,  0.0f,
-         0.5f,  0.0f,  0.0f,
-         0.0f,  0.75f, 0.0f,
-        -0.5f,  0.0f,  0.0f,
-    };
+         0.5f,  0.0f,  0.0f
+    };*/
 
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    
+    glm::mat4 mvp;
+    mvp = glm::ortho( 0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f );
+
+    // Use our shader
+    glUseProgram( programID );
+    GLuint MatrixID = glGetUniformLocation( programID, "MVP" );
+    glUniformMatrix4fv( MatrixID, 1, GL_FALSE, &mvp[0][0] );
 
     do {
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
-
-        // Use our shader
-        glUseProgram(programID);
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -101,7 +113,7 @@ int main(void)
         );
 
         // Draw the triangle !
-        glDrawArrays(GL_TRIANGLES, 0, 6); // 3 indices starting at 0 -> 1 triangle
+        glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
 
         glDisableVertexAttribArray(0);
 
