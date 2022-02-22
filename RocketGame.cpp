@@ -67,33 +67,38 @@ int main(void)
 
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders(
-        "shaders/SimpleVertexShader.vertexshader",
-        "shaders/SimpleFragmentShader.fragmentshader");
+        "shaders/shader.vert",
+        "shaders/shader.frag");
 
-    static const GLfloat g_vertex_buffer_data[] = {
-        50.0f,   50.0f,   0.0f,
-        50.0f,   100.0f,  0.0f,
-        100.0f,  100.0f,  0.0f,
+    static const GLfloat verts[] = {
+          0.0f,   -50.0f,  
+        -50.0f,    50.0f, 
+          0.0f,     0.0f,
+          0.0f,   -50.0f,
+          0.0f,     0.0f,
+         50.0f,    50.0f,
     };
-
-    /*static const GLfloat g_vertex_buffer_data[] = {
-        -0.5f,  0.0f,  0.0f,
-         0.0f, -0.75f, 0.0f,
-         0.5f,  0.0f,  0.0f
-    };*/
 
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
     
-    glm::mat4 mvp;
-    mvp = glm::ortho( 0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f );
+    static const GLfloat translation[] = {
+        (float)WINDOW_WIDTH / 2.0f,
+        (float)WINDOW_HEIGHT / 2.0f
+    };
+
+    glm::mat4 projection;
+    projection = glm::ortho( 0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f );
 
     // Use our shader
     glUseProgram( programID );
-    GLuint MatrixID = glGetUniformLocation( programID, "MVP" );
-    glUniformMatrix4fv( MatrixID, 1, GL_FALSE, &mvp[0][0] );
+    GLuint MatrixID = glGetUniformLocation( programID, "projection" );
+    glUniformMatrix4fv( MatrixID, 1, GL_FALSE, &projection[0][0] );
+
+    GLuint translation_loc = glGetUniformLocation( programID, "translation" );
+    glUniform2fv( translation_loc, 1, &translation[0] );
 
     do {
 
@@ -104,16 +109,15 @@ int main(void)
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(
-            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-        );
+            0,                  
+            2,                  
+            GL_FLOAT,           
+            GL_FALSE,           
+            0,                  
+            (void*)0 );
 
         // Draw the triangle !
-        glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
+        glDrawArrays( GL_TRIANGLES, 0, 6 );
 
         glDisableVertexAttribArray(0);
 
