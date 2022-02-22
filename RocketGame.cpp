@@ -1,6 +1,8 @@
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <math.h>
 
 // Include GLEW
 #define GLEW_STATIC
@@ -100,7 +102,22 @@ int main(void)
     GLuint translation_loc = glGetUniformLocation( programID, "translation" );
     glUniform2fv( translation_loc, 1, &translation[0] );
 
+    GLuint lookat_loc = glGetUniformLocation( programID, "lookat" );
+
     do {
+
+        double xpos, ypos;
+        glfwGetCursorPos( window, &xpos, &ypos);
+
+        xpos = xpos - ( (double)WINDOW_WIDTH  / 2 );
+        ypos = ypos - ( (double)WINDOW_HEIGHT / 2 );
+        double angle = atan2( xpos, ypos );
+        angle += (double)3.14f;
+
+        glm::mat2 rotation = {
+            vec2( cosf((float)angle ), -1.0f*sinf( (float)angle ) ),
+            vec2( sinf((float)angle ),       cosf( (float)angle ) ) };
+        glUniformMatrix2fv( lookat_loc, 1, GL_FALSE, &rotation[0][0] );
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
