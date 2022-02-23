@@ -6,19 +6,12 @@
 #include <GLFW/glfw3.h>
 GLFWwindow* window;
 
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "common/shader.hpp"
-
-#define WINDOW_WIDTH  ( 1024 )
-#define WINDOW_HEIGHT ( 768 )
-
 int main(void)
 {
     // Initialise GLFW
     if( !glfwInit() )
     {
-        fprintf(stderr, "Failed to initialize GLFW\n");
+        fprintf( stderr, "Failed to initialize GLFW\n" );
         getchar();
         return -1;
     }
@@ -55,34 +48,11 @@ int main(void)
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
     GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
-
-    // Create and compile our GLSL program from the shaders
-    GLuint programID = LoadShaders(
-        "shaders/shader.vert",
-        "shaders/shader.frag");    
-    
-    static const GLfloat translation[] = 
-    {
-        (float)WINDOW_WIDTH / 2.0f,
-        (float)WINDOW_HEIGHT / 2.0f
-    };
-
-    glm::mat4 projection;
-    projection = glm::ortho( 0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f );
-
-    // Use our shader
-    glUseProgram( programID );
-    GLuint MatrixID = glGetUniformLocation( programID, "projection" );
-    glUniformMatrix4fv( MatrixID, 1, GL_FALSE, &projection[0][0] );
-
-    GLuint translation_loc = glGetUniformLocation( programID, "translation" );
-    glUniform2fv( translation_loc, 1, &translation[0] );
-
-    GLuint lookat_loc = glGetUniformLocation( programID, "lookat" );
+    glGenVertexArrays( 1, &VertexArrayID );
+    glBindVertexArray( VertexArrayID );
 
     Rocket rocket;
+    rocket.setPosition((float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f);
 
     do {
         double xpos, ypos;
@@ -93,14 +63,10 @@ int main(void)
         double angle = atan2( xpos, ypos );
         angle += (double)3.14f;
 
-        glm::mat2 rotation = {
-            vec2( cosf((float)angle ), -1.0f*sinf( (float)angle ) ),
-            vec2( sinf((float)angle ),       cosf( (float)angle ) ) };
-        glUniformMatrix2fv( lookat_loc, 1, GL_FALSE, &rotation[0][0] );
-
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 
+        rocket.setDirection( angle );
         rocket.Draw();
 
         // Swap buffers
@@ -113,7 +79,6 @@ int main(void)
 
     // Cleanup
     glDeleteVertexArrays(1, &VertexArrayID);
-    glDeleteProgram( programID );
 
     // Close OpenGL window and terminate GLFW
     glfwTerminate();
