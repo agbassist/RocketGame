@@ -5,12 +5,12 @@
 
 static const GLfloat verts[] = 
 {
-      0.0f,   -50.0f,
+     50.0f,     0.0f,
     -50.0f,    50.0f,
       0.0f,     0.0f,
-      0.0f,   -50.0f,
+     50.0f,     0.0f,
       0.0f,     0.0f,
-     50.0f,    50.0f,
+    -50.0f,   -50.0f,
 };
 
 Rocket::Rocket() {
@@ -18,7 +18,7 @@ Rocket::Rocket() {
     program = LoadShaders("shaders/rocket.vert", "shaders/rocket.frag");
     glUseProgram( program );
     
-    mat4 projection = ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f);
+    mat4 projection = ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 

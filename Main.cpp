@@ -52,6 +52,8 @@ int main(void)
     glBindVertexArray( VertexArrayID );
 
     Rocket rocket;
+    
+    // Initialize position to the middle of the screen
     rocket.setPosition((float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f);
 
     do {
@@ -60,8 +62,7 @@ int main(void)
 
         xpos = xpos - ( (double)WINDOW_WIDTH  / 2 );
         ypos = ypos - ( (double)WINDOW_HEIGHT / 2 );
-        double angle = atan2( xpos, ypos );
-        angle += (double)3.14f;
+        double angle = atan2( ypos, xpos );
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
