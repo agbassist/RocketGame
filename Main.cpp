@@ -59,15 +59,12 @@ int main(void)
     do {
         double xpos, ypos;
         glfwGetCursorPos( window, &xpos, &ypos);
-
-        xpos = xpos - ( (double)WINDOW_WIDTH  / 2 );
-        ypos = ypos - ( (double)WINDOW_HEIGHT / 2 );
-        double angle = atan2( ypos, xpos );
+        ypos = (float)WINDOW_HEIGHT - ypos;
+        rocket.setDirection( xpos, ypos );
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
-
-        rocket.setDirection( angle );
+        
         rocket.Draw();
 
         // Swap buffers

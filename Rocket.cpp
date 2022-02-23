@@ -38,12 +38,19 @@ Rocket::~Rocket() {
 
 void Rocket::Draw() {
 
-    glUniform2fv( translationLoc, 1, &pos[0] );
+    float theta = atan2f(
+        direction[1] - pos[1],
+        direction[0] - pos[0]
+    );
+
+    pos[0] += ( direction[0] - pos[0] ) / 200.0f;
+    pos[1] += ( direction[1] - pos[1] ) / 200.0f;
+    glUniform2fv( translationLoc, 1, &pos[0] );    
 
     glm::mat2 rotation = 
     {
-    vec2(cosf((float)direction), -1.0f * sinf((float)direction)),
-    vec2(sinf((float)direction),         cosf((float)direction))
+    vec2(         cosf( theta ), sinf( theta ) ),
+    vec2( -1.0f * sinf( theta ), cosf( theta ) )
     };
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
@@ -60,6 +67,7 @@ void Rocket::setPosition( float x, float y ) {
     pos[ 1 ] = y;
 }
 
-void Rocket::setDirection( float dir ) {
-    direction = dir;
+void Rocket::setDirection( float x, float y ) {
+    direction[0] = x;
+    direction[1] = y;
 }
