@@ -1,21 +1,12 @@
-// Include standard headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <math.h>
 
-// Include GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
+#include "Common.hpp"
+#include "Rocket.hpp"
 
 // Include GLFW
 #include <GLFW/glfw3.h>
 GLFWwindow* window;
 
-// Include GLM
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-using namespace glm;
 
 #include "common/shader.hpp"
 
@@ -61,8 +52,8 @@ int main(void)
     glfwSetInputMode( window, GLFW_STICKY_KEYS, GL_TRUE );
 
     // Black background
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
@@ -70,23 +61,10 @@ int main(void)
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders(
         "shaders/shader.vert",
-        "shaders/shader.frag");
-
-    static const GLfloat verts[] = {
-          0.0f,   -50.0f,  
-        -50.0f,    50.0f, 
-          0.0f,     0.0f,
-          0.0f,   -50.0f,
-          0.0f,     0.0f,
-         50.0f,    50.0f,
-    };
-
-    GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+        "shaders/shader.frag");    
     
-    static const GLfloat translation[] = {
+    static const GLfloat translation[] = 
+    {
         (float)WINDOW_WIDTH / 2.0f,
         (float)WINDOW_HEIGHT / 2.0f
     };
@@ -104,8 +82,9 @@ int main(void)
 
     GLuint lookat_loc = glGetUniformLocation( programID, "lookat" );
 
-    do {
+    Rocket rocket;
 
+    do {
         double xpos, ypos;
         glfwGetCursorPos( window, &xpos, &ypos);
 
@@ -122,21 +101,7 @@ int main(void)
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-            0,                  
-            2,                  
-            GL_FLOAT,           
-            GL_FALSE,           
-            0,                  
-            (void*)0 );
-
-        // Draw the triangle !
-        glDrawArrays( GL_TRIANGLES, 0, 6 );
-
-        glDisableVertexAttribArray(0);
+        rocket.Draw();
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -146,10 +111,9 @@ int main(void)
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
         glfwWindowShouldClose(window) == 0);
 
-    // Cleanup VBO
-    glDeleteBuffers(1, &vertexbuffer);
+    // Cleanup
     glDeleteVertexArrays(1, &VertexArrayID);
-    glDeleteProgram(programID);
+    glDeleteProgram( programID );
 
     // Close OpenGL window and terminate GLFW
     glfwTerminate();

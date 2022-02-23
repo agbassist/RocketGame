@@ -164,10 +164,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="common\shader.cpp" />
-    <ClCompile Include="RocketGame.cpp" />
+    <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.hpp" />
     <ClInclude Include="common\shader.hpp" />
+    <ClInclude Include="Rocket.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
