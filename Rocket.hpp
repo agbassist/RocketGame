@@ -7,6 +7,7 @@ class Rocket
 private:
     vec2   pos;
     vec2   direction;
+    float  directionAngle;
 
     GLuint VBO;
     GLuint program;
@@ -20,6 +21,7 @@ public:
 
     void Draw();
     void setPosition( float x, float y );
-    void setDirection(float x, float y);
+    void setDirection( float x, float y );
+    void addDirection( float theta );
 };
 

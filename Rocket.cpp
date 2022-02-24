@@ -29,6 +29,8 @@ Rocket::Rocket() {
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
     glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
+
+    directionAngle = 0.0f;
 }
 
 Rocket::~Rocket() {
@@ -43,15 +45,25 @@ void Rocket::Draw() {
         direction[0] - pos[0]
     );
 
-    pos[0] += ( direction[0] - pos[0] ) / 200.0f;
-    pos[1] += ( direction[1] - pos[1] ) / 200.0f;
+    //pos[0] += ( direction[0] - pos[0] ) / 200.0f;
+    //pos[1] += ( direction[1] - pos[1] ) / 200.0f;
+    
+    #define SPEED ( 2.0f / 3.14f )
+    pos[0] += SPEED * cosf( directionAngle );
+    pos[1] += SPEED * sinf(directionAngle);
+
     glUniform2fv( translationLoc, 1, &pos[0] );    
 
-    glm::mat2 rotation = 
-    {
-    vec2(         cosf( theta ), sinf( theta ) ),
-    vec2( -1.0f * sinf( theta ), cosf( theta ) )
-    };
+    /*glm::mat2 rotation = 
+        {
+        vec2(         cosf( theta ), sinf( theta ) ),
+        vec2( -1.0f * sinf( theta ), cosf( theta ) )
+        };*/
+    glm::mat2 rotation =
+        {
+        vec2(cosf(directionAngle), sinf(directionAngle)),
+        vec2(-1.0f * sinf(directionAngle), cosf(directionAngle))
+        };
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
     glEnableVertexAttribArray( 0 );
@@ -70,4 +82,8 @@ void Rocket::setPosition( float x, float y ) {
 void Rocket::setDirection( float x, float y ) {
     direction[0] = x;
     direction[1] = y;
+}
+
+void Rocket::addDirection(float theta) {
+    directionAngle += theta;
 }

@@ -60,7 +60,21 @@ int main(void)
         double xpos, ypos;
         glfwGetCursorPos( window, &xpos, &ypos);
         ypos = (float)WINDOW_HEIGHT - ypos;
-        rocket.setDirection( xpos, ypos );
+        //rocket.setDirection( xpos, ypos );
+
+        if (glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS) {
+            
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            
+        }
+        // Turn Left
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+            rocket.addDirection( 0.5f * 3.14f / 180.0f );
+        } // Turn Right
+        else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+            rocket.addDirection(-0.5f * 3.14f / 180.0f);
+        }
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
