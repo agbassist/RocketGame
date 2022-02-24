@@ -13,12 +13,13 @@ static const GLfloat verts[] =
     -50.0f,   -50.0f,
 };
 
-Rocket::Rocket() {
+Rocket::Rocket()
+{
 
-    program = LoadShaders("shaders/rocket.vert", "shaders/rocket.frag");
+    program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
     glUseProgram( program );
     
-    mat4 projection = ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
+    mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 
@@ -33,13 +34,14 @@ Rocket::Rocket() {
     directionAngle = 0.0f;
 }
 
-Rocket::~Rocket() {
+Rocket::~Rocket()
+{
     glDeleteBuffers( 1, &VBO );
     glDeleteProgram( program );
 }
 
-void Rocket::Draw() {
-
+void Rocket::Draw()
+{
     float theta = atan2f(
         direction[1] - pos[1],
         direction[0] - pos[0]
@@ -50,7 +52,7 @@ void Rocket::Draw() {
     
     #define SPEED ( 2.0f / 3.14f )
     pos[0] += SPEED * cosf( directionAngle );
-    pos[1] += SPEED * sinf(directionAngle);
+    pos[1] += SPEED * sinf( directionAngle );
 
     glUniform2fv( translationLoc, 1, &pos[0] );    
 
@@ -61,8 +63,8 @@ void Rocket::Draw() {
         };*/
     glm::mat2 rotation =
         {
-        vec2(cosf(directionAngle), sinf(directionAngle)),
-        vec2(-1.0f * sinf(directionAngle), cosf(directionAngle))
+        vec2(         cosf( directionAngle ), sinf( directionAngle ) ),
+        vec2( -1.0f * sinf( directionAngle ), cosf( directionAngle ) )
         };
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
@@ -74,16 +76,19 @@ void Rocket::Draw() {
     glDisableVertexAttribArray( 0 );
 }
 
-void Rocket::setPosition( float x, float y ) {
-    pos[ 0 ] = x;
-    pos[ 1 ] = y;
+void Rocket::setPosition( float x, float y )
+{
+    pos[0] = x;
+    pos[1] = y;
 }
 
-void Rocket::setDirection( float x, float y ) {
+void Rocket::setDirection( float x, float y )
+{
     direction[0] = x;
     direction[1] = y;
 }
 
-void Rocket::addDirection(float theta) {
+void Rocket::addDirection( float theta )
+{
     directionAngle += theta;
 }
