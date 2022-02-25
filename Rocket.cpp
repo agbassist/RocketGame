@@ -3,9 +3,9 @@
 #include "Shader.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-Rocket::Rocket( float x, float y )
+Rocket::Rocket( GLuint program, float x, float y )
 {
-    program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
+    this->program = program;
     glUseProgram( program );
     
     mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );

@@ -21,7 +21,7 @@ private:
     void checkHitForceField( float& val, float min, float max );
 
 public:
-    Rocket( float x, float y );
+    Rocket( GLuint program, float x, float y );
     ~Rocket();
 
     void Draw();

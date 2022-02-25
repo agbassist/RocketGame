@@ -2,6 +2,7 @@
 #include "Common.hpp"
 #include "Rocket.hpp"
 #include "Planet.hpp"
+#include "Shader.hpp"
 
 // Include GLFW
 #include <GLFW/glfw3.h>
@@ -50,8 +51,9 @@ int main()
     // Black background
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-    Rocket rocket( (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f );
-    //Planet planet( 50.0f, 50.0f, 25.0f );
+    GLuint program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
+    Rocket rocket( program, 100.0f, 100.0f );
+    Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 150.0f );
 
     do {
         double currentTime, lastTime = 0.0f;
@@ -92,7 +94,7 @@ int main()
 
         rocket.incrementTime( deltaTime / 1000.0f );
         rocket.Draw();
-        //planet.Draw();
+        planet.Draw();
 
         // Swap buffers
         glfwSwapBuffers( window );
