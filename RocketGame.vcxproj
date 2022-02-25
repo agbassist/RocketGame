@@ -163,12 +163,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="Planet.hpp" />
     <ClInclude Include="Rocket.hpp" />
     <ClInclude Include="Shader.hpp" />
   </ItemGroup>

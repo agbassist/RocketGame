@@ -1,6 +1,7 @@
 
 #include "Common.hpp"
 #include "Rocket.hpp"
+#include "Planet.hpp"
 
 // Include GLFW
 #include <GLFW/glfw3.h>
@@ -49,14 +50,8 @@ int main()
     // Black background
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-    GLuint VertexArrayID;
-    glGenVertexArrays( 1, &VertexArrayID );
-    glBindVertexArray( VertexArrayID );
-
-    Rocket rocket;
-    
-    // Initialize position to the middle of the screen
-    rocket.setPosition( (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f );
+    Rocket rocket( (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f );
+    //Planet planet( 50.0f, 50.0f, 25.0f );
 
     do {
         double currentTime, lastTime = 0.0f;
@@ -97,6 +92,7 @@ int main()
 
         rocket.incrementTime( deltaTime / 1000.0f );
         rocket.Draw();
+        //planet.Draw();
 
         // Swap buffers
         glfwSwapBuffers( window );
@@ -104,9 +100,6 @@ int main()
 
     } while( glfwGetKey( window, GLFW_KEY_ESCAPE ) != GLFW_PRESS
           && glfwWindowShouldClose( window ) == 0 );
-
-    // Cleanup
-    glDeleteVertexArrays( 1, &VertexArrayID );
 
     // Close OpenGL window and terminate GLFW
     glfwTerminate();

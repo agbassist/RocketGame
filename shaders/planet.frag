@@ -5,6 +5,6 @@ out vec3 color;
 
 void main()
 {
-	// Output color = red 
-	color = vec3( 1, 0, 0 );
+	// Output color = blue 
+	color = vec3( 0, 0, 1 );
 }

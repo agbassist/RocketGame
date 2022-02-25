@@ -11,6 +11,7 @@ private:
     float  speed;
     float  deltaTime;
 
+    GLuint VAO;
     GLuint VBO;
     GLuint program;
 
@@ -20,11 +21,10 @@ private:
     void checkHitForceField( float& val, float min, float max );
 
 public:
-    Rocket();
+    Rocket( float x, float y );
     ~Rocket();
 
     void Draw();
-    void setPosition( float x, float y );
     void incrementAngle( float theta );
     void accelerate( float accel );
     void incrementTime( float deltaTime );

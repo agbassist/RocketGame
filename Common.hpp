@@ -16,3 +16,5 @@ using namespace glm;
 
 #define WINDOW_WIDTH  ( 1500 )
 #define WINDOW_HEIGHT ( 900 )
+
+#define CNT_OF_ARRAY( a ) ( sizeof( a ) / sizeof( a[0] ) )
