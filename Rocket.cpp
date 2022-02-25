@@ -3,14 +3,15 @@
 #include "Shader.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
+#define SIZE 25.0f
 static const GLfloat verts[] = 
 {
-     50.0f,     0.0f,
-    -50.0f,    50.0f,
-      0.0f,     0.0f,
-     50.0f,     0.0f,
-      0.0f,     0.0f,
-    -50.0f,   -50.0f,
+     SIZE,    0.0f,
+    -SIZE,    SIZE,
+     0.0f,    0.0f,
+     SIZE,    0.0f,
+     0.0f,    0.0f,
+    -SIZE,   -SIZE,
 };
 
 Rocket::Rocket()
@@ -59,7 +60,7 @@ void Rocket::Draw()
 {
     speed += accel;    
 
-    #define MAX_SPEED 500.0f
+    #define MAX_SPEED 200.0f
     speed = speed >= MAX_SPEED ? MAX_SPEED : speed;
     speed = speed <= -MAX_SPEED ? -MAX_SPEED : speed;
 

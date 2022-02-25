@@ -66,7 +66,7 @@ int main()
         ypos = (float)WINDOW_HEIGHT - ypos;
         //rocket.setDirection( xpos, ypos );
 
-        #define ACCEL 1.0f
+        #define ACCEL 0.6f
         if( glfwGetKey( window, GLFW_KEY_UP ) == GLFW_PRESS )
             {
             rocket.accelerate( ACCEL );
