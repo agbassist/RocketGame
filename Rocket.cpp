@@ -15,7 +15,6 @@ static const GLfloat verts[] =
 
 Rocket::Rocket()
 {
-
     program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
     glUseProgram( program );
     
@@ -31,7 +30,9 @@ Rocket::Rocket()
     glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
 
-    directionAngle = 0.0f;
+    angle = 0.0f;
+    accel = 0.0f;
+    speed = 0.0f;
 }
 
 Rocket::~Rocket()
@@ -40,31 +41,40 @@ Rocket::~Rocket()
     glDeleteProgram( program );
 }
 
+void Rocket::checkHitForceField( float& val, float min, float max )
+{
+    if( val < min )
+        {
+        val = min;
+        speed = 0.0f;
+        }
+    else if( val > max )
+        {
+        val = max;
+        speed = 0.0f;
+        }    
+}
+
 void Rocket::Draw()
 {
-    float theta = atan2f(
-        direction[1] - pos[1],
-        direction[0] - pos[0]
-    );
+    speed += accel;    
 
-    //pos[0] += ( direction[0] - pos[0] ) / 200.0f;
-    //pos[1] += ( direction[1] - pos[1] ) / 200.0f;
-    
-    #define SPEED ( 2.0f / 3.14f )
-    pos[0] += SPEED * cosf( directionAngle );
-    pos[1] += SPEED * sinf( directionAngle );
+    #define MAX_SPEED 500.0f
+    speed = speed >= MAX_SPEED ? MAX_SPEED : speed;
+    speed = speed <= -MAX_SPEED ? -MAX_SPEED : speed;
+
+    pos[0] += speed * deltaTime * cosf( angle );
+    pos[1] += speed * deltaTime * sinf( angle );
+
+    checkHitForceField( pos[0], 0, WINDOW_WIDTH );
+    checkHitForceField( pos[1], 0, WINDOW_HEIGHT );
 
     glUniform2fv( translationLoc, 1, &pos[0] );    
 
-    /*glm::mat2 rotation = 
-        {
-        vec2(         cosf( theta ), sinf( theta ) ),
-        vec2( -1.0f * sinf( theta ), cosf( theta ) )
-        };*/
     glm::mat2 rotation =
         {
-        vec2(         cosf( directionAngle ), sinf( directionAngle ) ),
-        vec2( -1.0f * sinf( directionAngle ), cosf( directionAngle ) )
+        vec2(         cosf( angle ), sinf( angle ) ),
+        vec2( -1.0f * sinf( angle ), cosf( angle ) )
         };
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
@@ -74,21 +84,28 @@ void Rocket::Draw()
     glDrawArrays( GL_TRIANGLES, 0, 6 );
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
     glDisableVertexAttribArray( 0 );
+
+    accel = 0.0f;
+    deltaTime = 0.0f;
 }
 
 void Rocket::setPosition( float x, float y )
 {
-    pos[0] = x;
-    pos[1] = y;
+    this->pos[0] = x;
+    this->pos[1] = y;
 }
 
-void Rocket::setDirection( float x, float y )
+void Rocket::incrementAngle( float angle )
 {
-    direction[0] = x;
-    direction[1] = y;
+    this->angle += angle;
 }
 
-void Rocket::addDirection( float theta )
+void Rocket::accelerate( float accel )
 {
-    directionAngle += theta;
+    this->accel = accel;
+}
+
+void Rocket::incrementTime( float deltaTime )
+{
+    this->deltaTime = deltaTime;
 }

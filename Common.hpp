@@ -14,5 +14,5 @@
 #include <glm/glm.hpp>
 using namespace glm;
 
-#define WINDOW_WIDTH  ( 1024 )
-#define WINDOW_HEIGHT ( 768 )
+#define WINDOW_WIDTH  ( 1500 )
+#define WINDOW_HEIGHT ( 900 )
