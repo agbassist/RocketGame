@@ -25,6 +25,12 @@ public:
     ~Rocket();
 
     void Draw();
+
+    void Move();
+    void Stop();
+
+    vec2 getPos();
+
     void incrementAngle( float theta );
     void accelerate( float accel );
     void incrementTime( float deltaTime );

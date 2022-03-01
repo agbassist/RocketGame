@@ -55,23 +55,31 @@ int main()
     Rocket rocket( program, 100.0f, 100.0f );
     Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 150.0f );
 
+    double currentTime;
+    double lastTime;
+    float  deltaTime;
+
+    currentTime = glfwGetTime();
+    lastTime = currentTime;
+    deltaTime = 0.0f;
+
     do {
-        double currentTime, lastTime = 0.0f;
-        
         double xpos, ypos;
         glfwGetCursorPos( window, &xpos, &ypos );
         ypos = (float)WINDOW_HEIGHT - ypos;
         //rocket.setDirection( xpos, ypos );
 
-        #define ACCEL 0.6f
+        #define ACCEL 1000.0f
+        float acceleration = 0.0f;
         if( glfwGetKey( window, GLFW_KEY_UP ) == GLFW_PRESS )
             {
-            rocket.accelerate( ACCEL );
+            acceleration += ACCEL;            
             }
         if( glfwGetKey( window, GLFW_KEY_DOWN ) == GLFW_PRESS )
             {
-            rocket.accelerate( -ACCEL );
+            acceleration += -ACCEL;
             }
+        rocket.accelerate( acceleration );
 
         #define TURN ( 0.8f )
         #define DEGREE_TO_RADIANS ( 3.14f / 180.0f )
@@ -83,16 +91,22 @@ int main()
             {
             rocket.incrementAngle( -TURN * DEGREE_TO_RADIANS );
             }
+        
+        if( glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS )
+            {
+            rocket.Stop();
+            }
+
+        // Calculate time that has passed
+        currentTime = glfwGetTime();
+        deltaTime = float( currentTime - lastTime );
+        lastTime = currentTime;
+
+        rocket.incrementTime( deltaTime );
+        rocket.Move();
 
         // Clear the screen
         glClear( GL_COLOR_BUFFER_BIT );
-        
-        // Calculate time that has passed
-        currentTime = glfwGetTime();
-        float deltaTime = float( currentTime - lastTime );
-        lastTime = currentTime;
-
-        rocket.incrementTime( deltaTime / 1000.0f );
         rocket.Draw();
         planet.Draw();
 

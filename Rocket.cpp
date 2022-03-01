@@ -57,28 +57,49 @@ void Rocket::checkHitForceField( float& val, float min, float max )
         {
         val = min;
         speed = 0.0f;
+        accel = 0.0f;
         }
     else if( val > max )
         {
         val = max;
         speed = 0.0f;
+        accel = 0.0f;
         }    
 }
 
-void Rocket::Draw()
+void Rocket::Move()
 {
-    speed += accel;    
+    /* Position Calculation s = s0 + v0t + 0.5at^2 */
+    float delta_pos = ( speed * deltaTime )                   \
+                    + ( 0.5f * accel * deltaTime * deltaTime );
 
-    #define MAX_SPEED 200.0f
-    speed = speed >= MAX_SPEED ? MAX_SPEED : speed;
-    speed = speed <= -MAX_SPEED ? -MAX_SPEED : speed;
-
-    pos[0] += speed * deltaTime * cos( angle );
-    pos[1] += speed * deltaTime * sin( angle );
+    pos[0] += delta_pos * cos( angle );
+    pos[1] += delta_pos * sin( angle );
 
     checkHitForceField( pos[0], 0, WINDOW_WIDTH );
     checkHitForceField( pos[1], 0, WINDOW_HEIGHT );
 
+    /* Speed Calculation v = v0 + at */
+    speed += accel * deltaTime;
+
+    #define MAX_SPEED 1000.0f
+    speed = speed >= MAX_SPEED ? MAX_SPEED : speed;
+    speed = speed <= -MAX_SPEED ? -MAX_SPEED : speed;
+}
+
+void Rocket::Stop()
+{
+    accel = 0.0f;
+    speed = 0.0f;
+}
+
+vec2 Rocket::getPos()
+{
+    return( pos );
+}
+
+void Rocket::Draw()
+{
     glUniform2fv( translationLoc, 1, &pos[0] );    
 
     glm::mat2 rotation =
@@ -96,9 +117,6 @@ void Rocket::Draw()
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
     glDisableVertexAttribArray( 0 );
     glBindVertexArray( GL_ZERO );
-
-    accel = 0.0f;
-    deltaTime = 0.0f;
 }
 
 void Rocket::incrementAngle( float angle )
