@@ -32,7 +32,8 @@ public:
     vec2 getPos();
 
     void incrementAngle( float theta );
-    void accelerate( float accel );
+    void addAccel( float accel );
+    void addAccel( vec2 accel );
     void incrementTime( float deltaTime );
 };
 

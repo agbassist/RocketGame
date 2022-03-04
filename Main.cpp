@@ -105,7 +105,9 @@ int main()
 
         rocket.incrementTime( deltaTime );
         rocket.incrementAngle( turn );
-        rocket.accelerate( acceleration );
+        rocket.addAccel( acceleration );
+        planet.ImpartGravity( rocket );
+        //rocket.addAccel( {10.0f,10.0f} );
         rocket.Stop( stop );
         rocket.Move();
 

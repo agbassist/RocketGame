@@ -5,6 +5,9 @@
 
 Planet::Planet( GLuint program, float x, float y, float radius )
 {
+    this->radius = radius;
+    this->pos    = { x, y };
+
     this->program = program;
     glUseProgram( program );
 
@@ -60,4 +63,28 @@ void Planet::Draw()
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
     glDisableVertexAttribArray( 0 );
     glBindVertexArray( VAO );
+}
+
+void Planet::ImpartGravity( Rocket& rocket )
+{
+    vec2 deltaPos = this->pos - rocket.getPos();
+    float radius = length( deltaPos );
+    float angle = atan2( deltaPos[1], deltaPos[0] );
+
+    if( radius <= this->radius )
+        {
+        // Doesn't work like I thought it would
+        //rocket.Stop( true );
+        //return;
+        }
+
+    //std::cout << "( " << deltaPos[0] << ", " << deltaPos[1] << " )\n";
+
+    #define SCALAR 20000000.0f // G * m1 * m2 - just make this something that feels nice
+    vec2 force;
+    float force_scalar = ( SCALAR / ( radius * radius ) );
+    force[0] = force_scalar * cos( angle );
+    force[1] = force_scalar * sin( angle );
+
+    rocket.addAccel( force );
 }

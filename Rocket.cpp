@@ -39,9 +39,7 @@ Rocket::Rocket( GLuint program, float x, float y )
     angle = 0.0f;
     accel = { 0.0f, 0.0f };
     velo = { 0.0f, 0.0f };
-
-    pos[0] = x;
-    pos[1] = y;
+    pos = { x, y };
 }
 
 Rocket::~Rocket()
@@ -87,6 +85,8 @@ void Rocket::Move()
         {
         velo = MAX_SPEED * normalize( velo );
         }
+
+    accel = { 0.0f, 0.0f };
 }
 
 void Rocket::Stop( bool stop )
@@ -129,10 +129,15 @@ void Rocket::incrementAngle( float angle )
     this->angle += angle;
 }
 
-void Rocket::accelerate( float accel )
+void Rocket::addAccel( float accel )
 {
-    this->accel = { accel * cos( angle ), accel * sin( angle ) };
+    this->accel = this->accel + vec2( { accel * cos( angle ), accel * sin( angle ) } );
 }
+
+void Rocket::addAccel( vec2 accel )
+    {
+    this->accel = this->accel + accel;
+    }
 
 void Rocket::incrementTime( float deltaTime )
 {
