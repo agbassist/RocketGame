@@ -37,8 +37,8 @@ Rocket::Rocket( GLuint program, float x, float y )
     glBindVertexArray( GL_ZERO );
 
     angle = 0.0f;
-    accel = 0.0f;
-    speed = 0.0f;
+    accel = { 0.0f, 0.0f };
+    velo = { 0.0f, 0.0f };
 
     pos[0] = x;
     pos[1] = y;
@@ -56,41 +56,46 @@ void Rocket::checkHitForceField( float& val, float min, float max )
     if( val < min )
         {
         val = min;
-        speed = 0.0f;
-        accel = 0.0f;
+        velo = { 0.0f, 0.0f };
+        accel = { 0.0f, 0.0f };
         }
     else if( val > max )
         {
         val = max;
-        speed = 0.0f;
-        accel = 0.0f;
+        velo = { 0.0f, 0.0f };
+        accel = { 0.0f, 0.0f };
         }    
 }
 
 void Rocket::Move()
 {
     /* Position Calculation s = s0 + v0t + 0.5at^2 */
-    float delta_pos = ( speed * deltaTime )                   \
+    vec2 delta_pos = ( velo * deltaTime )                   \
                     + ( 0.5f * accel * deltaTime * deltaTime );
 
-    pos[0] += delta_pos * cos( angle );
-    pos[1] += delta_pos * sin( angle );
+    pos[0] += delta_pos[ 0 ];
+    pos[1] += delta_pos[ 1 ];
 
     checkHitForceField( pos[0], 0, WINDOW_WIDTH );
     checkHitForceField( pos[1], 0, WINDOW_HEIGHT );
 
     /* Speed Calculation v = v0 + at */
-    speed += accel * deltaTime;
+    velo += accel * deltaTime;
 
     #define MAX_SPEED 1000.0f
-    speed = speed >= MAX_SPEED ? MAX_SPEED : speed;
-    speed = speed <= -MAX_SPEED ? -MAX_SPEED : speed;
+    if( length( velo ) >= MAX_SPEED )
+        {
+        velo = MAX_SPEED * normalize( velo );
+        }
 }
 
-void Rocket::Stop()
+void Rocket::Stop( bool stop )
 {
-    accel = 0.0f;
-    speed = 0.0f;
+    if( stop )
+        {
+        accel = { 0.0f, 0.0f };
+        velo = { 0.0f, 0.0f };
+        }
 }
 
 vec2 Rocket::getPos()
@@ -126,7 +131,7 @@ void Rocket::incrementAngle( float angle )
 
 void Rocket::accelerate( float accel )
 {
-    this->accel = accel;
+    this->accel = { accel * cos( angle ), accel * sin( angle ) };
 }
 
 void Rocket::incrementTime( float deltaTime )

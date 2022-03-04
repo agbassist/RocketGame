@@ -79,22 +79,23 @@ int main()
             {
             acceleration += -ACCEL;
             }
-        rocket.accelerate( acceleration );
 
         #define TURN ( 0.8f )
         #define DEGREE_TO_RADIANS ( 3.14f / 180.0f )
+        float turn = 0.0f;
         if( glfwGetKey( window, GLFW_KEY_LEFT ) == GLFW_PRESS )
             {
-            rocket.incrementAngle( TURN * DEGREE_TO_RADIANS );
+            turn = TURN * DEGREE_TO_RADIANS;
             }
         if( glfwGetKey( window, GLFW_KEY_RIGHT ) == GLFW_PRESS )
             {
-            rocket.incrementAngle( -TURN * DEGREE_TO_RADIANS );
+            turn = -TURN * DEGREE_TO_RADIANS;
             }
         
+        bool stop = false;
         if( glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS )
             {
-            rocket.Stop();
+            stop = true;
             }
 
         // Calculate time that has passed
@@ -103,6 +104,9 @@ int main()
         lastTime = currentTime;
 
         rocket.incrementTime( deltaTime );
+        rocket.incrementAngle( turn );
+        rocket.accelerate( acceleration );
+        rocket.Stop( stop );
         rocket.Move();
 
         // Clear the screen

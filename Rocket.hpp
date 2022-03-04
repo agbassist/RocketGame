@@ -7,8 +7,8 @@ class Rocket
 private:
     vec2   pos;
     float  angle;
-    float  accel;
-    float  speed;
+    vec2   accel;
+    vec2   velo;
     float  deltaTime;
 
     GLuint VAO;
@@ -27,7 +27,7 @@ public:
     void Draw();
 
     void Move();
-    void Stop();
+    void Stop( bool stop );
 
     vec2 getPos();
 
