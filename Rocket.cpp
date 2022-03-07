@@ -81,7 +81,7 @@ void Rocket::Move()
     velo += accel * deltaTime;
 
     #define MAX_SPEED 1000.0f
-    if( length( velo ) >= MAX_SPEED )
+    if( length( velo ) > MAX_SPEED )
         {
         velo = MAX_SPEED * normalize( velo );
         }
@@ -101,6 +101,11 @@ void Rocket::Stop( bool stop )
 vec2 Rocket::getPos()
 {
     return( pos );
+}
+
+void Rocket::setPos( vec2 pos )
+{
+    this->pos = pos;
 }
 
 void Rocket::Draw()
@@ -142,4 +147,9 @@ void Rocket::addAccel( vec2 accel )
 void Rocket::incrementTime( float deltaTime )
 {
     this->deltaTime = deltaTime;
+}
+
+void Rocket::setSpeed( float speed )
+{
+    this->velo = vec2( { speed * cos( angle ), speed * sin( angle ) } );
 }

@@ -52,8 +52,9 @@ int main()
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
     GLuint program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
+    
     Rocket rocket( program, 100.0f, 100.0f );
-    Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 150.0f );
+    Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 100.0f );
 
     double currentTime;
     double lastTime;
@@ -69,7 +70,7 @@ int main()
         ypos = (float)WINDOW_HEIGHT - ypos;
         //rocket.setDirection( xpos, ypos );
 
-        #define ACCEL 1000.0f
+        #define ACCEL 800.0f
         float acceleration = 0.0f;
         if( glfwGetKey( window, GLFW_KEY_UP ) == GLFW_PRESS )
             {
@@ -81,7 +82,6 @@ int main()
             }
 
         #define TURN ( 0.8f )
-        #define DEGREE_TO_RADIANS ( 3.14f / 180.0f )
         float turn = 0.0f;
         if( glfwGetKey( window, GLFW_KEY_LEFT ) == GLFW_PRESS )
             {
@@ -107,7 +107,6 @@ int main()
         rocket.incrementAngle( turn );
         rocket.addAccel( acceleration );
         planet.ImpartGravity( rocket );
-        //rocket.addAccel( {10.0f,10.0f} );
         rocket.Stop( stop );
         rocket.Move();
 

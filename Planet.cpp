@@ -71,16 +71,18 @@ void Planet::ImpartGravity( Rocket& rocket )
     float radius = length( deltaPos );
     float angle = atan2( deltaPos[1], deltaPos[0] );
 
-    if( radius <= this->radius )
+    if( radius < this->radius )
         {
-        // Doesn't work like I thought it would
-        //rocket.Stop( true );
-        //return;
+        vec2 newPos;
+        newPos[0] = this->pos[0] + ( ( 1.0f + this->radius ) * cos( 3.14f + angle ) );
+        newPos[1] = this->pos[1] + ( ( 1.0f + this->radius ) * sin( 3.14f + angle ) );
+
+        rocket.Stop( true );
+        rocket.setPos( newPos );
+        return;
         }
 
-    //std::cout << "( " << deltaPos[0] << ", " << deltaPos[1] << " )\n";
-
-    #define SCALAR 20000000.0f // G * m1 * m2 - just make this something that feels nice
+    #define SCALAR 4500000.0f // G * m1 * m2 - just make this something that feels nice
     vec2 force;
     float force_scalar = ( SCALAR / ( radius * radius ) );
     force[0] = force_scalar * cos( angle );

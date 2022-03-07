@@ -30,10 +30,12 @@ public:
     void Stop( bool stop );
 
     vec2 getPos();
+    void setPos( vec2 pos );
 
     void incrementAngle( float theta );
     void addAccel( float accel );
     void addAccel( vec2 accel );
     void incrementTime( float deltaTime );
+    void setSpeed( float speed );
 };
 

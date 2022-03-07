@@ -18,3 +18,7 @@ using namespace glm;
 #define WINDOW_HEIGHT ( 900 )
 
 #define CNT_OF_ARRAY( a ) ( sizeof( a ) / sizeof( a[0] ) )
+
+#define DEGREE_TO_RADIANS ( 3.14f / 180.0f )
+
+#define PRINT_VEC( vec ) std::cout << "( " << vec[0] << ", " << vec[1] << " )\n"
