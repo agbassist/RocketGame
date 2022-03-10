@@ -51,7 +51,7 @@ int main()
     // Black background
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-    GLuint program = LoadShaders( "shaders/rocket.vert", "shaders/rocket.frag" );
+    GLuint program = LoadShader( "shaders/rocket.vert", "shaders/rocket.frag" );
     
     Rocket rocket( program, 100.0f, 100.0f );
     Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 100.0f );
