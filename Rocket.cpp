@@ -1,11 +1,12 @@
 
 #include "Rocket.hpp"
 #include "Shader.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 
-Rocket::Rocket( GLuint program, float x, float y )
+Rocket::Rocket( float x, float y )
 {
-    this->program = program;
+    program = LoadShader( "shaders/rocket.vert", "shaders/rocket.frag" );
     glUseProgram( program );
     
     mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
@@ -40,6 +41,7 @@ Rocket::Rocket( GLuint program, float x, float y )
     accel = { 0.0f, 0.0f };
     velo = { 0.0f, 0.0f };
     pos = { x, y };
+    deltaTime = 0.0f;
 }
 
 Rocket::~Rocket()
@@ -110,6 +112,7 @@ void Rocket::setPos( vec2 pos )
 
 void Rocket::Draw()
 {
+    glUseProgram( program );
     glUniform2fv( translationLoc, 1, &pos[0] );    
 
     glm::mat2 rotation =

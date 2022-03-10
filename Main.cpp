@@ -50,11 +50,9 @@ int main()
 
     // Black background
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-
-    GLuint program = LoadShader( "shaders/rocket.vert", "shaders/rocket.frag" );
     
-    Rocket rocket( program, 100.0f, 100.0f );
-    Planet planet( program, (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 100.0f );
+    Rocket rocket( 100.0f, 100.0f );
+    Planet planet( (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 100.0f );
 
     double currentTime;
     double lastTime;
@@ -112,8 +110,9 @@ int main()
 
         // Clear the screen
         glClear( GL_COLOR_BUFFER_BIT );
-        rocket.Draw();
+
         planet.Draw();
+        rocket.Draw();
 
         // Swap buffers
         glfwSwapBuffers( window );

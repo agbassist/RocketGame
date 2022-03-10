@@ -16,7 +16,7 @@ private:
     vec2  pos;
 
 public:
-    Planet( GLuint program, float x, float y, float radius );
+    Planet( float x, float y, float radius );
     ~Planet();
 
     void Draw();
