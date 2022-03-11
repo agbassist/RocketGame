@@ -1,19 +1,22 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Drawable.hpp"
 
-class Rocket : public Drawable
+class Rocket
 {
 private:
-    glm::vec2   pos;
-    float       angle;
-    glm::vec2   accel;
-    glm::vec2   velo;
-    float       deltaTime;
+    vec2   pos;
+    float  angle;
+    vec2   accel;
+    vec2   velo;
+    float  deltaTime;
 
-    GLuint      translationLoc;
-    GLuint      lookatLoc;
+    GLuint VAO;
+    GLuint VBO;
+    GLuint program;
+
+    GLuint translationLoc;
+    GLuint lookatLoc;
 
     void checkHitForceField( float& val, float min, float max );
 
@@ -26,12 +29,12 @@ public:
     void Move();
     void Stop( bool stop );
 
-    glm::vec2 getPos();
-    void setPos( glm::vec2 pos );
+    vec2 getPos();
+    void setPos( vec2 pos );
 
     void incrementAngle( float theta );
     void addAccel( float accel );
-    void addAccel( glm::vec2 accel );
+    void addAccel( vec2 accel );
     void incrementTime( float deltaTime );
     void setSpeed( float speed );
 };
