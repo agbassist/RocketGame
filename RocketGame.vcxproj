@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="Drawable.hpp" />
     <ClInclude Include="Planet.hpp" />
     <ClInclude Include="Rocket.hpp" />
     <ClInclude Include="Shader.hpp" />
