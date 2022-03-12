@@ -11,7 +11,7 @@ Planet::Planet( float x, float y, float radius )
     this->radius = radius;
     this->pos    = { x, y };
 
-    program = LoadShader( "shaders/planet.vert", "shaders/planet.frag" );
+    program = LoadShader( SHADER_PLANET_VERT, SHADER_PLANET_FRAG );
     glUseProgram( program );
 
     mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );

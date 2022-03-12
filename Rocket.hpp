@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.hpp"
+#include "RocketProjection.hpp"
 
 class Rocket
 {
@@ -17,6 +18,8 @@ private:
 
     GLuint translationLoc;
     GLuint lookatLoc;
+
+    RocketProjection projection;
 
     void checkHitForceField( float& val, float min, float max );
 

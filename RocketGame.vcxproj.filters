@@ -27,6 +27,9 @@
     <ClCompile Include="Planet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RocketProjection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rocket.hpp">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Planet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RocketProjection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

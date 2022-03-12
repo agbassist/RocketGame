@@ -6,7 +6,7 @@
 
 Rocket::Rocket( float x, float y )
 {
-    program = LoadShader( "shaders/rocket.vert", "shaders/rocket.frag" );
+    program = LoadShader( SHADER_ROCKET_VERT, SHADER_ROCKET_FRAG );
     glUseProgram( program );
     
     mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
@@ -130,6 +130,8 @@ void Rocket::Draw()
     glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
     glDisableVertexAttribArray( 0 );
     glBindVertexArray( GL_ZERO );
+
+    projection.Draw();
 }
 
 void Rocket::incrementAngle( float angle )
