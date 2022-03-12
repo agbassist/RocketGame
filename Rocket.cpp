@@ -31,14 +31,12 @@ Rocket::Rocket( float x, float y )
     glGenBuffers( 1, &VBO );
 
     glBindVertexArray( VAO );
-        {
-        glBindBuffer( GL_ARRAY_BUFFER, VBO );
-        glEnableVertexAttribArray( 0 );
-        glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
-
-        glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
-        }
-    glBindVertexArray( GL_ZERO );
+    glBindBuffer( GL_ARRAY_BUFFER, VBO );
+    glEnableVertexAttribArray( 0 );
+    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+    glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
 
     angle = 0.0f;
     accel = { 0.0f, 0.0f };
@@ -72,12 +70,7 @@ void Rocket::checkHitForceField( float& val, float min, float max )
 
 void Rocket::Move()
 {
-    /* Position Calculation s = s0 + v0t + 0.5at^2 */
-    vec2 delta_pos = ( velo * deltaTime )                   \
-                    + ( 0.5f * accel * deltaTime * deltaTime );
-
-    pos[0] += delta_pos[ 0 ];
-    pos[1] += delta_pos[ 1 ];
+    pos = KINETIC_EQ( pos, velo, accel, deltaTime );
 
     checkHitForceField( pos[0], 0, WINDOW_WIDTH );
     checkHitForceField( pos[1], 0, WINDOW_HEIGHT );
@@ -126,11 +119,12 @@ void Rocket::Draw()
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
     glBindVertexArray( VAO );
-        {
-        glDrawArrays( GL_TRIANGLES, 0, 6 );
-        }
-    glBindVertexArray( GL_ZERO );
+    glBindBuffer( GL_ARRAY_BUFFER, VBO );
+    glDrawArrays( GL_TRIANGLES, 0, 6 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
 
+    projection.CalculateVerts( pos, velo, accel );
     projection.Draw();
 }
 

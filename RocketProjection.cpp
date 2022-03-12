@@ -4,8 +4,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-static float verts[10][2];
-
 RocketProjection::RocketProjection()
 {
     program = LoadShader( SHADER_PLANET_VERT, SHADER_PLANET_FRAG );
@@ -24,22 +22,34 @@ RocketProjection::RocketProjection()
     glGenBuffers( 1, &VBO );
 
     glBindVertexArray( VAO );
-        {
-        glBindBuffer( GL_ARRAY_BUFFER, VBO );
-        glEnableVertexAttribArray( 0 );
-        glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+    glBindBuffer( GL_ARRAY_BUFFER, VBO );
+    glEnableVertexAttribArray( 0 );
+    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
+}
 
-        glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
+void RocketProjection::CalculateVerts( glm::vec2 &pos, glm::vec2 &velo, glm::vec2 &accel )
+{    
+    for( int i = 0; i < CNT_OF_ARRAY( verts ); i++ )
+        {
+        float deltaTime = ( 0.5f * i ) / CNT_OF_ARRAY( verts );
+        verts[i] = KINETIC_EQ( pos, velo, accel, deltaTime );
         }
-    glBindVertexArray( GL_ZERO );
+
+    glBindVertexArray( VAO );
+    glBindBuffer( GL_ARRAY_BUFFER, VBO );
+    glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STREAM_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
 }
 
 void RocketProjection::Draw()
 {
     glUseProgram( program );
     glBindVertexArray( VAO );
-        {
-        glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );
-        }
-    glBindVertexArray( GL_ZERO );
+    glBindBuffer( GL_ARRAY_BUFFER, VBO );
+    glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindVertexArray( 0 );
 }

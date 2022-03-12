@@ -22,3 +22,9 @@ using namespace glm;
 #define DEGREE_TO_RADIANS ( 3.14f / 180.0f )
 
 #define PRINT_VEC( vec ) std::cout << "( " << vec[0] << ", " << vec[1] << " )\n"
+
+
+/* Position Calculation s = s0 + v0t + 0.5at^2 */
+#define KINETIC_EQ( pos, velo, accel, deltaTime ) ( pos )                                 \
+                                                + ( velo * deltaTime )                    \
+                                                + ( 0.5f * accel * deltaTime * deltaTime );
