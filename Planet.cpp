@@ -26,13 +26,16 @@ Planet::Planet( float x, float y, float radius )
         }
 
     glGenVertexArrays( 1, &VAO );
-    glBindVertexArray( VAO );
-
     glGenBuffers( 1, &VBO );
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
-    glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
 
+    glBindVertexArray( VAO );
+        {
+        glBindBuffer( GL_ARRAY_BUFFER, VBO );
+        glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+        glEnableVertexAttribArray( 0 );
+
+        glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
+        }
     glBindVertexArray( GL_ZERO );
 }
 
@@ -47,13 +50,10 @@ void Planet::Draw()
 {
     glUseProgram( program );
     glBindVertexArray( VAO );
-    glEnableVertexAttribArray( 0 );
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
-    glDrawArrays( GL_LINE_LOOP, 0, NUM_VERTS );
-    glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
-    glDisableVertexAttribArray( 0 );
-    glBindVertexArray( VAO );
+        {
+        glDrawArrays( GL_LINE_LOOP, 0, NUM_VERTS );
+        }
+    glBindVertexArray( GL_ZERO );
 }
 
 void Planet::ImpartGravity( Rocket& rocket )

@@ -21,20 +21,25 @@ RocketProjection::RocketProjection()
         }
 
     glGenVertexArrays( 1, &VAO );
-    glBindVertexArray( VAO );
     glGenBuffers( 1, &VBO );
 
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
-    glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
+    glBindVertexArray( VAO );
+        {
+        glBindBuffer( GL_ARRAY_BUFFER, VBO );
+        glEnableVertexAttribArray( 0 );
+        glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+
+        glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
+        }
+    glBindVertexArray( GL_ZERO );
 }
 
 void RocketProjection::Draw()
 {
     glUseProgram( program );
     glBindVertexArray( VAO );
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, NULL );
-    glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );
+        {
+        glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );
+        }
+    glBindVertexArray( GL_ZERO );
 }

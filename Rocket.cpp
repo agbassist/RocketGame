@@ -7,8 +7,8 @@
 Rocket::Rocket( float x, float y )
 {
     program = LoadShader( SHADER_ROCKET_VERT, SHADER_ROCKET_FRAG );
-    glUseProgram( program );
-    
+    glUseProgram( program );    
+
     mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
@@ -28,13 +28,16 @@ Rocket::Rocket( float x, float y )
         };
 
     glGenVertexArrays( 1, &VAO );
-    glBindVertexArray( VAO );
-
     glGenBuffers( 1, &VBO );
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
-    glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
 
+    glBindVertexArray( VAO );
+        {
+        glBindBuffer( GL_ARRAY_BUFFER, VBO );
+        glEnableVertexAttribArray( 0 );
+        glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+
+        glBufferData( GL_ARRAY_BUFFER, sizeof( verts ), verts, GL_STATIC_DRAW );
+        }
     glBindVertexArray( GL_ZERO );
 
     angle = 0.0f;
@@ -123,12 +126,9 @@ void Rocket::Draw()
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
     glBindVertexArray( VAO );
-    glEnableVertexAttribArray( 0 );
-    glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
-    glDrawArrays( GL_TRIANGLES, 0, 6 );
-    glBindBuffer( GL_ARRAY_BUFFER, GL_ZERO );
-    glDisableVertexAttribArray( 0 );
+        {
+        glDrawArrays( GL_TRIANGLES, 0, 6 );
+        }
     glBindVertexArray( GL_ZERO );
 
     projection.Draw();
