@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Common.hpp"
-#include "RocketProjection.hpp"
 
 class Rocket
 {
 private:
-    vec2   pos;
-    float  angle;
-    vec2   accel;
-    vec2   velo;
-    float  deltaTime;
+    glm::vec2   pos;
+    float       angle;
+    glm::vec2   accel;
+    glm::vec2   velo;
+    float       deltaTime;
 
     GLuint VAO;
     GLuint VBO;
@@ -19,26 +18,27 @@ private:
     GLuint translationLoc;
     GLuint lookatLoc;
 
-    RocketProjection projection;
-
     void checkHitForceField( float& val, float min, float max );
 
 public:
     Rocket( float x, float y );
     ~Rocket();
-
     void Draw();
 
-    void Move();
-    void Stop( bool stop );
+    /* Getters */
+    glm::vec2 getPos() { return pos; }
+    glm::vec2 getVelo() { return velo; }
+    glm::vec2 getAccel() { return accel; }
 
-    vec2 getPos();
-    void setPos( vec2 pos );
+    /* Setters */
+    void setPos( glm::vec2 pos ) { this->pos = pos; }
 
     void incrementAngle( float theta );
     void addAccel( float accel );
-    void addAccel( vec2 accel );
+    void addAccel( glm::vec2 accel );
     void incrementTime( float deltaTime );
     void setSpeed( float speed );
+    void Move();
+    void Stop( bool stop );
 };
 

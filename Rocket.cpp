@@ -9,7 +9,7 @@ Rocket::Rocket( float x, float y )
     program = LoadShader( SHADER_ROCKET_VERT, SHADER_ROCKET_FRAG );
     glUseProgram( program );    
 
-    mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
+    glm::mat4 projection = glm::ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 
@@ -79,9 +79,9 @@ void Rocket::Move()
     velo += accel * deltaTime;
 
     #define MAX_SPEED 1000.0f
-    if( length( velo ) > MAX_SPEED )
+    if( glm::length( velo ) > MAX_SPEED )
         {
-        velo = MAX_SPEED * normalize( velo );
+        velo = MAX_SPEED * glm::normalize( velo );
         }
 
     accel = { 0.0f, 0.0f };
@@ -96,16 +96,6 @@ void Rocket::Stop( bool stop )
         }
 }
 
-vec2 Rocket::getPos()
-{
-    return( pos );
-}
-
-void Rocket::setPos( vec2 pos )
-{
-    this->pos = pos;
-}
-
 void Rocket::Draw()
 {
     glUseProgram( program );
@@ -113,8 +103,8 @@ void Rocket::Draw()
 
     glm::mat2 rotation =
         {
-        vec2(         cos( angle ), sin( angle ) ),
-        vec2( -1.0f * sin( angle ), cos( angle ) )
+        glm::vec2(         cos( angle ), sin( angle ) ),
+        glm::vec2( -1.0f * sin( angle ), cos( angle ) )
         };
     glUniformMatrix2fv( lookatLoc, 1, GL_FALSE, &rotation[0][0] );
 
@@ -123,9 +113,6 @@ void Rocket::Draw()
     glDrawArrays( GL_TRIANGLES, 0, 6 );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
-
-    projection.CalculateVerts( pos, velo, accel );
-    projection.Draw();
 }
 
 void Rocket::incrementAngle( float angle )
@@ -135,10 +122,10 @@ void Rocket::incrementAngle( float angle )
 
 void Rocket::addAccel( float accel )
 {
-    this->accel = this->accel + vec2( { accel * cos( angle ), accel * sin( angle ) } );
+    this->accel = this->accel + glm::vec2( { accel * cos( angle ), accel * sin( angle ) } );
 }
 
-void Rocket::addAccel( vec2 accel )
+void Rocket::addAccel( glm::vec2 accel )
     {
     this->accel = this->accel + accel;
     }
@@ -150,5 +137,5 @@ void Rocket::incrementTime( float deltaTime )
 
 void Rocket::setSpeed( float speed )
 {
-    this->velo = vec2( { speed * cos( angle ), speed * sin( angle ) } );
+    this->velo = glm::vec2( { speed * cos( angle ), speed * sin( angle ) } );
 }

@@ -12,8 +12,8 @@ private:
     GLuint translationLoc;
     GLuint lookatLoc;
 
-    float radius;
-    vec2  pos;
+    float      radius;
+    glm::vec2  pos;
 
 public:
     Planet( float x, float y, float radius );
@@ -21,5 +21,6 @@ public:
 
     void Draw();
     void ImpartGravity( Rocket& rocket );
+    glm::vec2 ImpartGravity( glm::vec2 pos );
 };
 

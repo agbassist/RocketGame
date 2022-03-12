@@ -14,7 +14,7 @@ Planet::Planet( float x, float y, float radius )
     program = LoadShader( SHADER_PLANET_VERT, SHADER_PLANET_FRAG );
     glUseProgram( program );
 
-    mat4 projection = ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
+    glm::mat4 projection = glm::ortho( 0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT );
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 
@@ -56,13 +56,13 @@ void Planet::Draw()
 
 void Planet::ImpartGravity( Rocket& rocket )
 {
-    vec2 deltaPos = this->pos - rocket.getPos();
-    float radius = length( deltaPos );
+    glm::vec2 deltaPos = this->pos - rocket.getPos();
+    float radius = glm::length( deltaPos );
     float angle = atan2( deltaPos[1], deltaPos[0] );
 
     if( radius < this->radius )
         {
-        vec2 newPos;
+        glm::vec2 newPos;
         newPos[0] = this->pos[0] + ( ( 1.0f + this->radius ) * cos( 3.14f + angle ) );
         newPos[1] = this->pos[1] + ( ( 1.0f + this->radius ) * sin( 3.14f + angle ) );
 
@@ -72,10 +72,25 @@ void Planet::ImpartGravity( Rocket& rocket )
         }
 
     #define SCALAR 4500000.0f // G * m1 * m2 - just make this something that feels nice
-    vec2 force;
+    glm::vec2 force;
     float force_scalar = ( SCALAR / ( radius * radius ) );
     force[0] = force_scalar * cos( angle );
     force[1] = force_scalar * sin( angle );
 
     rocket.addAccel( force );
+}
+
+glm::vec2 Planet::ImpartGravity( glm::vec2 pos )
+{
+    glm::vec2 deltaPos = this->pos - pos;
+    float radius = glm::length( deltaPos );
+    float angle = atan2( deltaPos[1], deltaPos[0] );
+
+    #define SCALAR 4500000.0f // G * m1 * m2 - just make this something that feels nice
+    glm::vec2 force;
+    float force_scalar = ( SCALAR / ( radius * radius ) );
+    force[0] = force_scalar * cos( angle );
+    force[1] = force_scalar * sin( angle );
+    
+    return( force );
 }

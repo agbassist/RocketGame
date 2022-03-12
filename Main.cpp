@@ -1,7 +1,8 @@
 
 #include "Common.hpp"
-#include "Rocket.hpp"
 #include "Planet.hpp"
+#include "Rocket.hpp"
+#include "RocketProjection.hpp"
 #include "Shader.hpp"
 
 // Include GLFW
@@ -53,6 +54,7 @@ int main()
     
     Rocket rocket( 100.0f, 100.0f );
     Planet planet( (float)WINDOW_WIDTH / 2.0f, (float)WINDOW_HEIGHT / 2.0f, 100.0f );
+    RocketProjection projection;
 
     double currentTime;
     double lastTime;
@@ -107,11 +109,13 @@ int main()
         planet.ImpartGravity( rocket );
         rocket.Stop( stop );
         rocket.Move();
-
+        projection.CalculatePath( rocket, planet );
+    
         // Clear the screen
         glClear( GL_COLOR_BUFFER_BIT );
 
         planet.Draw();
+        projection.Draw();
         rocket.Draw();
 
         // Swap buffers
