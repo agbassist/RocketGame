@@ -29,10 +29,9 @@ void RocketProjection::CalculatePath( Rocket &rocket, Planet &planet )
     glm::vec2 pos = rocket.getPos();
     glm::vec2 velo = rocket.getVelo();
 
-    /* Simulate 1 second and show path during that interval */
     for( int i = 0; i < CNT_OF_ARRAY( verts ); i++ )
         {
-        float deltaTime = ( 0.5f * i ) / CNT_OF_ARRAY( verts );
+        float deltaTime = 0.005f * i; // This should be similar to deltaTime to match rocket's path
         glm::vec2 accel = planet.ImpartGravity( pos );
         pos = KINETIC_EQ( pos, velo, accel, deltaTime );
         velo += accel * deltaTime;
