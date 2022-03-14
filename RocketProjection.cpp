@@ -12,6 +12,8 @@ RocketProjection::RocketProjection()
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 
+    colorLoc = glGetUniformLocation( program, "in_color" );
+
     glGenVertexArrays( 1, &VAO );
     glGenBuffers( 1, &VBO );
 
@@ -53,6 +55,10 @@ void RocketProjection::CalculatePath( Rocket &rocket, Planet &planet )
 void RocketProjection::Draw()
 {
     glUseProgram( program );
+    
+    glm::vec3 color = { 0.0f, 1.0f, 0.0f };
+    glUniform3fv( colorLoc, 1, &color[0] );
+
     glBindVertexArray( VAO );
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
     glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );

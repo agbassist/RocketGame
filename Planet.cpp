@@ -18,6 +18,8 @@ Planet::Planet( float x, float y, float radius )
     GLuint projectionLoc = glGetUniformLocation( program, "projection" );
     glUniformMatrix4fv( projectionLoc, 1, GL_FALSE, &projection[0][0] );
 
+    colorLoc = glGetUniformLocation( program, "in_color" );
+
     float verts[NUM_VERTS][2];
     for( int i = 0; i < NUM_VERTS; i++ )
         {
@@ -47,6 +49,10 @@ Planet::~Planet()
 void Planet::Draw()
 {
     glUseProgram( program );
+    
+    glm::vec3 color = { 0.0f, 0.0f, 1.0f };
+    glUniform3fv( colorLoc, 1, &color[0] );
+
     glBindVertexArray( VAO );
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
     glDrawArrays( GL_LINE_LOOP, 0, NUM_VERTS );

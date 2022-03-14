@@ -1,10 +1,12 @@
 #version 330 core
 
+uniform vec3 in_color;
+
 // Ouput data
 out vec3 color;
 
 void main()
 {
 	// Output color = blue 
-	color = vec3( 0, 0, 1 );
+	color = in_color;
 }

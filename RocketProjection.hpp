@@ -11,6 +11,9 @@ private:
     GLuint VAO;
     GLuint VBO;
 
+    // Uniforms
+    GLuint colorLoc;
+
     glm::vec2 verts[30];
 
 public:

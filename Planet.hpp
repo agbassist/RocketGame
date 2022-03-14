@@ -9,8 +9,9 @@ private:
     GLuint VAO;
     GLuint VBO;
     GLuint program;
-    GLuint translationLoc;
-    GLuint lookatLoc;
+
+    // Uniforms
+    GLuint colorLoc;
 
     float      radius;
     glm::vec2  pos;
