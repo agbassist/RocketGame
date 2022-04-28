@@ -30,8 +30,9 @@ void RocketProjection::CalculatePath( Rocket &rocket, Planet &planet )
 {    
     glm::vec2 pos = rocket.getPos();
     glm::vec2 velo = rocket.getVelo();
+    int i;
 
-    for( int i = 0; i < CNT_OF_ARRAY( verts ); i++ )
+    for( i = 0; i < CNT_OF_ARRAY( verts ); i++ )
         {
         float deltaTime = 0.005f * i; // This should be similar to deltaTime to match rocket's path
         glm::vec2 accel = planet.ImpartGravity( pos );
@@ -43,7 +44,14 @@ void RocketProjection::CalculatePath( Rocket &rocket, Planet &planet )
             velo = MAX_SPEED * glm::normalize( velo );
             }
         verts[i] = pos;
+
+        if( planet.IsInside( pos ) )
+            {
+            break;
+            }
         }
+
+    num_verts = i;
 
     glBindVertexArray( VAO );
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
@@ -61,7 +69,7 @@ void RocketProjection::Draw()
 
     glBindVertexArray( VAO );
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    glDrawArrays( GL_LINE_STRIP, 0, CNT_OF_ARRAY( verts ) );
+    glDrawArrays( GL_LINE_STRIP, 0, num_verts );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
 }

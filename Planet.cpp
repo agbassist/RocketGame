@@ -100,3 +100,8 @@ glm::vec2 Planet::ImpartGravity( glm::vec2 pos )
     
     return( force );
 }
+
+bool Planet::IsInside( glm::vec2 pos )
+{
+    return( glm::length( pos - this->pos ) <= this->radius );
+}

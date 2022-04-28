@@ -23,5 +23,6 @@ public:
     void Draw();
     void ImpartGravity( Rocket& rocket );
     glm::vec2 ImpartGravity( glm::vec2 pos );
+    bool IsInside(glm::vec2 pos);
 };
 

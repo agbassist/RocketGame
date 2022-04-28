@@ -15,6 +15,7 @@ private:
     GLuint colorLoc;
 
     glm::vec2 verts[30];
+    uint8_t   num_verts;
 
 public:
     RocketProjection();
